@@ -1,3 +1,15 @@
+/*
+  ShortestProcessNext.java
+
+  Author: Nathan Anstess
+  Student Number: c3202195
+  Date created: 24/08/17
+  Last updated: 29/05/17
+
+	Description: 	An implementation of a Scheduling Algorithm which represents a shortest process next
+								algorithm, where the next chosen process is the one with the shortest service time.
+*/
+
 import java.util.ArrayList;
 
 public class ShortestProcessNext implements SchedulingAlgorithm {
@@ -17,6 +29,7 @@ public class ShortestProcessNext implements SchedulingAlgorithm {
 		int maxServiceTime = 0;
 		boolean found = false;
 
+		// Selection sort to order processes based on service time.
 		for(int i = processes.size()-1; i >= 0; i--) {
 			found = false;
 			maxIndex = -1;
@@ -41,6 +54,13 @@ public class ShortestProcessNext implements SchedulingAlgorithm {
 		}
 	}
 
+	/*
+		@Input index1:	Index in List.
+		@Input index2:	Index in List.
+		@Input processes: List of processes.
+
+		Description:	Swaps the process object in the list whcich are reprsented by the two given indices.
+	*/
 	public void swap(int index1, int index2, ArrayList<Process> processes) {
 		if(index1 == index2) {
 			return;
@@ -55,6 +75,7 @@ public class ShortestProcessNext implements SchedulingAlgorithm {
 	}
 
 	public int getTimeQuantum(Process process) {
+		// Max time allowed in the CPU is it's service time.
 		return process.getServiceTime();
 	}
 

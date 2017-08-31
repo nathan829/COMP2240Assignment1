@@ -1,10 +1,20 @@
+/*
+  FirstComeFirstServed.java
+
+  Author: Nathan Anstess
+  Student Number: c3202195
+  Date created: 24/08/17
+  Last updated: 29/05/17
+
+	Description: 	An implementation of a Scheduling Algorithm as well as Preemptive Algorithm which preempts
+								on higher priority processes.
+*/
+
 import java.util.ArrayList;
 
 public class PreemptivePriority implements SchedulingAlgorithm, PreemptiveAlgorithm {
 
-	PreemptivePriority() {
-
-	}
+	PreemptivePriority() {}
 
 	public boolean preemptive() {
 		return true;											
@@ -15,10 +25,12 @@ public class PreemptivePriority implements SchedulingAlgorithm, PreemptiveAlgori
 	}
 
 	public boolean preemptProcess(Process cpuProcess, Process candidateProcess) {
+		// Higher value means less priority. 0 is the highest priority.
 		return cpuProcess.getPriority() > candidateProcess.getPriority();
 	}
 
 	public int getTimeQuantum(Process process) {
+		// Max time in processor is the remaining time that the process needs to finish.
 		return process.getServiceTime() - process.timeInCPU();
 	}
 
@@ -31,6 +43,7 @@ public class PreemptivePriority implements SchedulingAlgorithm, PreemptiveAlgori
 		int minPriority = -1;
 		boolean found = false;
 
+		// Selection sort to the order the processes based on their priorities. 
 		for(int i = processes.size()-1; i >= 0; i--) {
 			found = false;
 			minIndex = -1;
@@ -55,6 +68,13 @@ public class PreemptivePriority implements SchedulingAlgorithm, PreemptiveAlgori
 		}
 	}
 
+	/*
+		@Input index1:	Index in List.
+		@Input index2:	Index in List.
+		@Input processes: List of processes.
+
+		Description:	Swaps the process object in the list whcich are reprsented by the two given indices.
+	*/
 	public void swap(int index1, int index2, ArrayList<Process> processes) {
 		if(index1 == index2) {
 			return;
