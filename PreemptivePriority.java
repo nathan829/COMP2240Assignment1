@@ -34,37 +34,34 @@ public class PreemptivePriority implements SchedulingAlgorithm, PreemptiveAlgori
     return process.getServiceTime() - process.timeInCPU();
   }
 
-  public void orderProcesses(ArrayList<Process> processes) {
-    if (processes == null || processes.size() == 0){
-        return;
+  public Process selectNextProcess(ArrayList<Process> processes) {
+    if (processes.isEmpty()){
+        return null;
     }
 
     int minIndex = -1;
-    int minPriority = -1;
-    boolean found = false;
+    int minPriority = 10;   // Any number larger than 5.
 
-    // Selection sort to the order the processes based on their priorities. 
-    for(int i = processes.size()-1; i >= 0; i--) {
-      found = false;
-      minIndex = -1;
-      minPriority = -1;
-      for(int j = 0; j <= i; j++) {
-        if(processes.get(j).getPriority() > minPriority) {	
-          minPriority = processes.get(j).getPriority();
-          minIndex = j;
-          found = true;
-        }
-        else if(processes.get(j).getPriority() == minPriority) {
-          if(processes.get(j).compareID(processes.get(minIndex)) >= 0) {
-            minPriority = processes.get(j).getPriority();
-            minIndex = j;
-            found = true;
-          }
+    // Iterated through and find the process witht he lowest priority value (highest priority process).
+    for(int i = 0; i < processes.size(); i++) {
+      if(processes.get(i).getPriority() < minPriority) {	
+        minPriority = processes.get(i).getPriority();
+        minIndex = i;
+      }
+      else if(processes.get(i).getPriority() == minPriority) {
+        // Choose the proces who first entered the queue.
+        if(processes.get(i).getQueueEntryID() < processes.get(minIndex).getQueueEntryID()) {
+          minPriority = processes.get(i).getPriority();
+          minIndex = i;
         }
       }
-      if(found) {
-        swap(minIndex, i, processes);
-      }
+    }
+
+    if(minIndex == -1) {
+      return null;
+    }
+    else {
+      return processes.get(minIndex);
     }
   }
 

@@ -20,37 +20,34 @@ public class ShortestProcessNext implements SchedulingAlgorithm {
     return "SPN";
   }
 
-  public void orderProcesses(ArrayList<Process> processes) {
-    if (processes == null || processes.size() == 0){
-        return;
+  public Process selectNextProcess(ArrayList<Process> processes) {
+    if (processes.isEmpty()){
+        return null;
     }
 
-    int maxIndex = -1;
-    int maxServiceTime = 0;
-    boolean found = false;
+    int minIndex = -1;
+    int minServiceTime = Integer.MAX_VALUE;
 
     // Selection sort to order processes based on service time.
-    for(int i = processes.size()-1; i >= 0; i--) {
-      found = false;
-      maxIndex = -1;
-      maxServiceTime = 0;
-      for(int j = 0; j <= i; j++) {
-        if(processes.get(j).getServiceTime() > maxServiceTime) {	
-          maxServiceTime = processes.get(j).getServiceTime();
-          maxIndex = j;
-          found = true;
-        }
-        else if(processes.get(j).getServiceTime() == maxServiceTime) {
-          if(processes.get(j).compareID(processes.get(maxIndex)) >= 0) {
-            maxServiceTime = processes.get(j).getServiceTime();
-            maxIndex = j;
-            found = true;
-          }
+    for(int i = 0; i < processes.size(); i++) {
+      if(processes.get(i).getServiceTime() < minServiceTime) {	
+        minServiceTime = processes.get(i).getServiceTime();
+        minIndex = i;
+      }
+      else if(processes.get(i).getServiceTime() == minServiceTime) {
+        if(processes.get(i).getQueueEntryID() < processes.get(minIndex).getQueueEntryID()) {
+          // Choose the proces who first entered the queue.
+          minServiceTime = processes.get(i).getServiceTime();
+          minIndex = i;
         }
       }
-      if(found) {
-        swap(maxIndex, i, processes);
-      }
+    }
+
+    if(minIndex == -1) {
+      return null;
+    }
+    else {
+      return processes.get(minIndex);
     }
   }
 

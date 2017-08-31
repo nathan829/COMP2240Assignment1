@@ -20,8 +20,12 @@ public class PriorityRoundRobin implements SchedulingAlgorithm {
     return "PRR";
   }
 
-  public void orderProcesses(ArrayList<Process> processes) {
-    // No ordering needed, as it is a first come first served algorithm with time quantums.
+  public Process selectNextProcess(ArrayList<Process> processes) {
+    if(processes.isEmpty()) {
+      return null;
+    }
+    
+    return processes.get(0);
   }
 
   public boolean preemptive() {

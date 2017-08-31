@@ -17,9 +17,15 @@ public class FirstComeFirstServed implements SchedulingAlgorithm {
   FirstComeFirstServed() {}
 
   /*
-    Description: FCFS requires no ordering, it is just a basic in/out queue.
+    Description: FCFS just chooses the first process to enter the queue.
   */
-  public void orderProcesses(ArrayList<Process> processes) {}
+  public Process selectNextProcess(ArrayList<Process> processes) {
+    if(processes.isEmpty()) {
+      return null;
+    }
+
+    return processes.get(0);
+  }
 
   public boolean preemptive() {
     return false;

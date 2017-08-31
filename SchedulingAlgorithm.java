@@ -18,9 +18,9 @@ public interface SchedulingAlgorithm {
   /*
     @Input readyProcesses: A reference to a List of Process objects.
 
-    Description:	Orders the processes according to the definition of the scheduling algorithm.
+    Description:	Selection function which chooses the next Process to run.
   */
-  abstract void orderProcesses(ArrayList<Process> readyProcesses);
+  abstract Process selectNextProcess(ArrayList<Process> readyProcesses);
 
   /*	
     @Input process: A Process object.
