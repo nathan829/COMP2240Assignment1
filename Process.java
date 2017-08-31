@@ -138,7 +138,7 @@ public class Process {
     if(Integer.parseInt(ID.substring(1)) < Integer.parseInt(process.getID().substring(1))) {
       return -1;
     }
-    else if(Integer.parseInt(ID.substring(1)) < Integer.parseInt(process.getID().substring(1))) {
+    else if(Integer.parseInt(ID.substring(1)) > Integer.parseInt(process.getID().substring(1))) {
       return 1;
     }
     return 0;
