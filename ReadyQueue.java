@@ -22,8 +22,6 @@ public class ReadyQueue {
 
   private Time time;
 
-  private static int queueEntryID;
-
   ReadyQueue(SchedulingAlgorithm algorithm, ProcessReleaser processReleaser) {
     this.algorithm = algorithm;
     this.processReleaser = processReleaser;
@@ -31,30 +29,24 @@ public class ReadyQueue {
     time = Time.getInstance();		// Time singleton.
 
     processes = new ArrayList<>();
-    queueEntryID = 0;
   }
 
   /*
-    Description: Returns the next process, ordered according to the scheduling algorithm.
+    Description:  Returns the next process, using the selection function defined by the
+                  scheduling algorithm.
   */
   public Process nextProcess() {
-    if(processes.size() == 0) {
-      return null;
-    }
-
-    algorithm.orderProcesses(processes);
-    return processes.remove(0);
+    Process nextProcess = algorithm.selectNextProcess(processes);
+    processes.remove(nextProcess);
+    return nextProcess;
   }
 
   /*	
-    Description: 	Adds a process to the ready queue, assigned an entry ID and ordered by the
-                  scheduling algorithm.
+    Description: 	Adds a process to the ready queue, unordered.
   */
   public void addProcess(Process process) {
-    process.setQueueEntryID(queueEntryID++);
+    process.setQueueEntryID(Identifier.getID());
     processes.add(process);
-
-    algorithm.orderProcesses(processes);
   }
 
   /*	
@@ -62,34 +54,22 @@ public class ReadyQueue {
                   fetched from the process releaser, keeping the readyQueue up-to-date.
   */
   public void fetchNewProcesses() {
-    Process fetched = null;
-    boolean newProcessFetched = false;
-
     while(processReleaser.hasReadyProcess()) {
-      fetched = processReleaser.releaseNextProcess();
+      Process fetched = processReleaser.releaseNextProcess();
 
-      fetched.setQueueEntryID(queueEntryID++);
+      fetched.setQueueEntryID(Identifier.getID());
 
       fetched.setTimeEnteredReadyQueue(time.getTime());
       processes.add(fetched);
-      newProcessFetched = true;
-    }
-
-    // Reorder the processes if any new processes were fetched.
-    if(newProcessFetched) {
-      algorithm.orderProcesses(processes);
     }
   }
 
   public boolean isEmpty() {
-    return processes.size() == 0;
+    return processes.isEmpty();
   }
 
   public Process peekNextProcess() {
-    if(processes.size() == 0) {
-      return null;
-    }
-    return processes.get(0);
+    return algorithm.selectNextProcess(processes);
   }
 
   public boolean moreProcessesToRelease() {
