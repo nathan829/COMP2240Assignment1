@@ -11,13 +11,13 @@
 
 public interface PreemptiveAlgorithm {
 
-	/*
-		@Input cpuProcess:	Process currently in the processor/CPU.
-		@Input candidateProcess:	Process that has the potential to preempt.
+  /*
+    @Input cpuProcess:	Process currently in the processor/CPU.
+    @Input candidateProcess:	Process that has the potential to preempt.
 
-		Description: 	Compares the two processes and determines whether the candidate process
-									should preempt the cpu process.
-	*/
-	abstract boolean preemptProcess(Process cpuProcess, Process candidateProcess);
+    Description: 	Compares the two processes and determines whether the candidate process
+                  should preempt the cpu process.
+  */
+  abstract boolean preemptProcess(Process cpuProcess, Process candidateProcess);
 
 }
