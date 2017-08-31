@@ -55,7 +55,7 @@ public class ProcessReleaser {
     Description: Returns the next process in the waiting queue.
   */
   public Process releaseNextProcess() {
-    if(waitingProcesses.size() == 0) {
+    if(waitingProcesses.isEmpty()) {
       return null;
     }
 
@@ -71,7 +71,7 @@ public class ProcessReleaser {
                   'arrived' in the system or not.
   */
   public boolean hasReadyProcess() {
-    if(waitingProcesses.size() == 0) {
+    if(waitingProcesses.isEmpty()) {
       return false;
     }
     return waitingProcesses.get(0).getArrivalTime() <= time.getTime();
