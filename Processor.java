@@ -1,17 +1,26 @@
-import java.util.ArrayList;
+/*
+  Processor.java
+
+  Author: Nathan Anstess
+  Student Number: c3202195
+  Date created: 24/08/17
+  Last updated: 29/05/17
+
+	Description: 	A Processor/CPU object which is able to hold a process, add/remove processes
+								and increment the time in which a process has spent in the processor.
+*/
 
 public class Processor {
 
 	private boolean occupied;
 	private Process process;
 
-	private ArrayList<Process> completedProcesses;
-
 	private Time time;
 
 	Processor() {
 		occupied = false;
-		completedProcesses = new ArrayList<>();
+		process = null;
+
 		time = Time.getInstance();
 	}
 
@@ -19,54 +28,48 @@ public class Processor {
 		return occupied;
 	}
 
+	/*
+		@Input process: Process to be added to the processor.
+
+		Description: Process is added to the processor, records the time entered and sets the processor as occupied.
+	*/
 	public void pushProcess(Process process) {
 		if(process == null) {
-			System.out.println("Pushed process is null");
 			occupied = false;
 			return;
 		}
+
 		this.process = process;
 		this.process.setTimeEnteredCPU(time.getTime());
 		occupied = true;
 	}
 
-	public void addToCompleted() {
-		if(!processFinished()) {
-			return;
-		}
+	/*
+		@Input increment: Non-negative integer.
 
-		occupied = false;
-		process.setTimeCompleted(time.getTime());
-		completedProcesses.add(process);
-		process = null;
-	}
-
+		Description: 	For the process currently in the processor, the time the processor has spent in the processor
+									is recorded/incremented.
+	*/
 	public void incrementProcessTime(int increment) {
 		if(process != null) {
 			process.incrementTotalTimeInCPU(increment);
 		}
 	}
 
-	public boolean processFinished() {
-		if(!occupied) {
-			return false;	
-		}
-		return process.getServiceTime() - process.timeInCPU() <= 0;	// Really equality but will leave
-	}
-
 	public Process peekProcess() {
 		return process;
 	}
 
-	public ArrayList<Process> getCompletedProcesses() {
-		return completedProcesses;
-	}
-
+	/*
+		Description: Returns and removes process from the processor, records the time exited and sets as not occupied.
+	*/
 	public Process popProcess() {
 		Process returning = process;
 
 		process = null;
 		occupied = false;
+
+		returning.setTimeLeftCPU(time.getTime());
 
 		return returning;
 	}
